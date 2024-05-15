@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""A module for filtering logs.
+"""Module for filtering logs
 """
 import os
 import re
@@ -18,14 +18,14 @@ PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 def filter_datum(
         fields: List[str], redaction: str, message: str, separator: str,
         ) -> str:
-    """Filters a log line.
+    """It replaces specified fields in message with redaction string
     """
     extract, replace = (patterns["extract"], patterns["replace"])
     return re.sub(extract(fields, separator), replace(redaction), message)
 
 
 def get_logger() -> logging.Logger:
-    """Creates a new logger for user data.
+    """Configures and returns logger with redaction capabilities for user data
     """
     logger = logging.getLogger("user_data")
     stream_handler = logging.StreamHandler()
@@ -37,7 +37,7 @@ def get_logger() -> logging.Logger:
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Creates a connector to a database.
+    """Establishes and returns MySQL database connection
     """
     db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
@@ -54,7 +54,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main():
-    """Logs the information about user records in a table.
+    """It fetches and logs user records from the database
     """
     fields = "name,email,phone,ssn,password,ip,last_login,user_agent"
     columns = fields.split(',')
@@ -76,7 +76,7 @@ def main():
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
+    """Formatter class for redacting sensitive information in log messages
     """
 
     REDACTION = "***"
@@ -89,7 +89,7 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """formats a LogRecord.
+        """It pplies redaction to log message fields
         """
         msg = super(RedactingFormatter, self).format(record)
         txt = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
