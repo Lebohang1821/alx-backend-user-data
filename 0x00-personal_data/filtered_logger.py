@@ -25,7 +25,7 @@ def filter_datum(
 
 
 def get_logger() -> logging.Logger:
-    """Configures and returns logger with redaction capabilities for user data
+    """Configures and returns logger with redaction capabilities
     """
     logger = logging.getLogger("user_data")
     stream_handler = logging.StreamHandler()
