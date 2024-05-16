@@ -18,14 +18,14 @@ PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 def filter_datum(
         fields: List[str], redaction: str, message: str, separator: str,
         ) -> str:
-    """It replaces occurrences of specified fields in message with redaction text
+    """It replaces specified fields in message with redaction string
     """
     extract, replace = (patterns["extract"], patterns["replace"])
     return re.sub(extract(fields, separator), replace(redaction), message)
 
 
 def get_logger() -> logging.Logger:
-    """Configures and returns a logger for user data with redaction capabilities.
+    """Configures and returns logger with redaction capabilities
     """
     logger = logging.getLogger("user_data")
     stream_handler = logging.StreamHandler()
@@ -37,7 +37,7 @@ def get_logger() -> logging.Logger:
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Establishes and returns database connection using envir variables
+    """Establishes and returns MySQL database connection
     """
     db_host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = os.getenv("PERSONAL_DATA_DB_NAME", "")
@@ -54,7 +54,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main():
-    """It fetches and logs user records from database
+    """It fetches and logs user records from the database
     """
     fields = "name,email,phone,ssn,password,ip,last_login,user_agent"
     columns = fields.split(',')
@@ -76,7 +76,7 @@ def main():
 
 
 class RedactingFormatter(logging.Formatter):
-    """Custom formatter to redact sensitive information in log messages
+    """Formatter class for redacting sensitive information in log messages
     """
 
     REDACTION = "***"
@@ -89,8 +89,8 @@ class RedactingFormatter(logging.Formatter):
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-    """It applies redaction to log message fields specified
-    """
+        """It pplies redaction to log message fields
+        """
         msg = super(RedactingFormatter, self).format(record)
         txt = filter_datum(self.fields, self.REDACTION, msg, self.SEPARATOR)
         return txt
