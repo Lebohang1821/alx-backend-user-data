@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-""" DocDocDocDocDocDoc
+"""Blueprint for API routes.
 """
 from flask import Blueprint
 
