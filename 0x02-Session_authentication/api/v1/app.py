@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Route module for the API.
+"""It's a module for the API.
 """
 import os
 from os import getenv
@@ -54,7 +54,7 @@ def forbidden(error) -> str:
 
 @app.before_request
 def authenticate_user():
-    """Authenticates a user before processing a request.
+    """Authent user before processing request.
     """
     if auth:
         excluded_paths = [
