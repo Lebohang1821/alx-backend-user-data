@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
+"""Session authentication module for the API.
 """
-Session authentication module for API.
-"""
-
 from uuid import uuid4
 from flask import request
 
@@ -11,65 +9,37 @@ from models.user import User
 
 
 class SessionAuth(Auth):
-    """
-    Handles session-based authentication.
+    """Session authentication class.
     """
     user_id_by_session_id = {}
 
     def create_session(self, user_id: str = None) -> str:
+        """Creates a session id for the user.
         """
-        Creates a session ID for a given user ID.
-        
-        Args:
-            user_id (str): The ID of the user to create a session for.
-        
-        Returns:
-            str: A new session ID.
-        """
-        if isinstance(user_id, str):
+        if type(user_id) is str:
             session_id = str(uuid4())
             self.user_id_by_session_id[session_id] = user_id
             return session_id
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
+        """Retrieves the user id of the user associated with
+        a given session id.
         """
-        Retrieves the user ID associated with a given session ID.
-        
-        Args:
-            session_id (str): The session ID to look up.
-        
-        Returns:
-            str: The user ID associated with session ID, or None if not found.
-        """
-        if isinstance(session_id, str):
+        if type(session_id) is str:
             return self.user_id_by_session_id.get(session_id)
 
     def current_user(self, request=None) -> User:
-        """
-        Retrieves current user based on session cookie in request.
-        
-        Args:
-            request: Flask request object containing the session cookie.
-        
-        Returns:
-            User: User associated with session, or None if not found.
+        """Retrieves the user associated with the request.
         """
         user_id = self.user_id_for_session_id(self.session_cookie(request))
         return User.get(user_id)
 
-    def destroy_session(self, request=None) -> bool:
-        """
-        Invalidates the session associated with the given request.
-        
-        Args:
-            request: The Flask request object containing the session cookie.
-        
-        Returns:
-            bool: True if session was successfully destroyed, False otherwise.
+    def destroy_session(self, request=None):
+        """Destroys an authenticated session.
         """
         session_id = self.session_cookie(request)
         user_id = self.user_id_for_session_id(session_id)
-        if request is None or session_id is None or user_id is None:
+        if (request is None or session_id is None) or user_id is None:
             return False
         if session_id in self.user_id_by_session_id:
             del self.user_id_by_session_id[session_id]
