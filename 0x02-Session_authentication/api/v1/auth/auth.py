@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Authentication module for API
+"""Authentication module for the API.
 """
 import os
 import re
@@ -8,10 +8,10 @@ from flask import request
 
 
 class Auth:
-    """Authentication for class
+    """Authentication class.
     """
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """It checks i path requires authentication
+        """Checks if a path requires authentication.
         """
         if path is not None and excluded_paths is not None:
             for exclusion_path in map(lambda x: x.strip(), excluded_paths):
@@ -27,18 +27,19 @@ class Auth:
         return True
 
     def authorization_header(self, request=None) -> str:
-        """It gets authorization header field from request
+        """Gets authorization header field from the request.
         """
         if request is not None:
             return request.headers.get('Authorization', None)
         return None
+
     def current_user(self, request=None) -> TypeVar('User'):
-        """Gets the current user from the request.
+        """Gets current user from request.
         """
         return None
 
     def session_cookie(self, request=None) -> str:
-        """Gets the value of the cookie named SESSION_NAME.
+        """Gets value of the cookie named SESSION_NAME.
         """
         if request is not None:
             cookie_name = os.getenv('SESSION_NAME')
