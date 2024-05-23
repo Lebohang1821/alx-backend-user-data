@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Session authentication module for the API
+Session authentication module for API.
 """
 
 from uuid import uuid4
@@ -18,13 +18,13 @@ class SessionAuth(Auth):
 
     def create_session(self, user_id: str = None) -> str:
         """
-        Creates session ID for a given user ID
+        Creates a session ID for a given user ID.
         
         Args:
-            user_id (str): The ID of user to create session for.
+            user_id (str): The ID of the user to create a session for.
         
         Returns:
-            str: new session ID
+            str: A new session ID.
         """
         if isinstance(user_id, str):
             session_id = str(uuid4())
@@ -39,30 +39,30 @@ class SessionAuth(Auth):
             session_id (str): The session ID to look up.
         
         Returns:
-            str: user ID associated with session ID, or None if not found
+            str: The user ID associated with session ID, or None if not found.
         """
         if isinstance(session_id, str):
             return self.user_id_by_session_id.get(session_id)
 
     def current_user(self, request=None) -> User:
         """
-        Retrieves current user based on the session cookie in request
+        Retrieves current user based on session cookie in request.
         
         Args:
-            request: Flask request object containing the session cookie
+            request: Flask request object containing the session cookie.
         
         Returns:
-            User: User associated with the session, or None if not found
+            User: User associated with session, or None if not found.
         """
         user_id = self.user_id_for_session_id(self.session_cookie(request))
         return User.get(user_id)
 
     def destroy_session(self, request=None) -> bool:
         """
-        Invalidates session associated with given request
+        Invalidates the session associated with the given request.
         
         Args:
-            request: Flask request object containing session cookie
+            request: The Flask request object containing the session cookie.
         
         Returns:
             bool: True if session was successfully destroyed, False otherwise.
