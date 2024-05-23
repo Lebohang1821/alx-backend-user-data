@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Module of session authenticating views.
+"""Module for session authentication views.
 """
 import os
 from typing import Tuple
@@ -8,12 +8,11 @@ from flask import abort, jsonify, request
 from models.user import User
 from api.v1.views import app_views
 
-
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
 def login() -> Tuple[str, int]:
-    """POST /api/v1/auth_session/login
+    """It handles login for session authentication.
     Return:
-      - JSON representation of a User object.
+      - JSON representation of User object.
     """
     not_found_res = {"error": "no user found for this email"}
     email = request.form.get('email')
@@ -26,22 +25,21 @@ def login() -> Tuple[str, int]:
         users = User.search({'email': email})
     except Exception:
         return jsonify(not_found_res), 404
-    if len(users) <= 0:
+    if len(users) == 0:
         return jsonify(not_found_res), 404
     if users[0].is_valid_password(password):
         from api.v1.app import auth
-        sessiond_id = auth.create_session(getattr(users[0], 'id'))
+        session_id = auth.create_session(getattr(users[0], 'id'))
         res = jsonify(users[0].to_json())
-        res.set_cookie(os.getenv("SESSION_NAME"), sessiond_id)
+        res.set_cookie(os.getenv("SESSION_NAME"), session_id)
         return res
     return jsonify({"error": "wrong password"}), 401
 
-@app_views.route(
-    '/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
 def logout() -> Tuple[str, int]:
-    """DELETE /api/v1/auth_session/logout
+    """Handles logout for session authentication.
     Return:
-      - An empty JSON object.
+      - Empty JSON object.
     """
     from api.v1.app import auth
     is_destroyed = auth.destroy_session(request)
