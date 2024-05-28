@@ -33,7 +33,7 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Adds a new user to the database.
+        """It adds new user to database.
         """
         try:
             new_user = User(email=email, hashed_password=hashed_password)
@@ -45,7 +45,7 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs) -> User:
-        """Finds a user based on a set of filters.
+        """It finds user based on set of filters.
         """
         fields, values = [], []
         for key, value in kwargs.items():
@@ -62,7 +62,7 @@ class DB:
         return result
 
     def update_user(self, user_id: int, **kwargs) -> None:
-        """Updates a user based on a given id.
+        """It updates user based on given id.
         """
         user = self.find_user_by(id=user_id)
         if user is None:
