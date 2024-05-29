@@ -13,37 +13,37 @@ AUTH = Auth()
 @app.route("/", methods=["GET"], strict_slashes=False)
 def index() -> str:
     """GET /
-    Returns:
-        - The payload of the home page.
+    Return:
+        - The home page's payload.
     """
-    return jsonify({"message": "Welcome"})
+    return jsonify({"message": "Bienvenue"})
 
 
 @app.route("/users", methods=["POST"], strict_slashes=False)
 def users() -> str:
     """POST /users
-    Returns:
-        - The payload for account creation.
+    Return:
+        - The account creation payload.
     """
     email, password = request.form.get("email"), request.form.get("password")
     try:
         AUTH.register_user(email, password)
-        return jsonify({"email": email, "message": "User created"})
+        return jsonify({"email": email, "message": "user created"})
     except ValueError:
-        return jsonify({"message": "Email already registered"}), 400
+        return jsonify({"message": "email already registered"}), 400
 
 
 @app.route("/sessions", methods=["POST"], strict_slashes=False)
 def login() -> str:
     """POST /sessions
-    Returns:
-        - The payload for account login.
+    Return:
+        - The account login payload.
     """
     email, password = request.form.get("email"), request.form.get("password")
     if not AUTH.valid_login(email, password):
         abort(401)
     session_id = AUTH.create_session(email)
-    response = jsonify({"email": email, "message": "Logged in"})
+    response = jsonify({"email": email, "message": "logged in"})
     response.set_cookie("session_id", session_id)
     return response
 
@@ -51,8 +51,8 @@ def login() -> str:
 @app.route("/sessions", methods=["DELETE"], strict_slashes=False)
 def logout() -> str:
     """DELETE /sessions
-    Returns:
-        - Redirects to the home route.
+    Return:
+        - Redirects to home route.
     """
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
@@ -65,7 +65,7 @@ def logout() -> str:
 @app.route("/profile", methods=["GET"], strict_slashes=False)
 def profile() -> str:
     """GET /profile
-    Returns:
+    Return:
         - The user's profile information.
     """
     session_id = request.cookies.get("session_id")
@@ -78,8 +78,8 @@ def profile() -> str:
 @app.route("/reset_password", methods=["POST"], strict_slashes=False)
 def get_reset_password_token() -> str:
     """POST /reset_password
-    Returns:
-        - The payload for resetting the user's password.
+    Return:
+        - The user's password reset payload.
     """
     email = request.form.get("email")
     reset_token = None
@@ -95,8 +95,8 @@ def get_reset_password_token() -> str:
 @app.route("/reset_password", methods=["PUT"], strict_slashes=False)
 def update_password() -> str:
     """PUT /reset_password
-    Returns:
-        - The payload for updating user's password.
+    Return:
+        - The user's password updated payload.
     """
     email = request.form.get("email")
     reset_token = request.form.get("reset_token")
