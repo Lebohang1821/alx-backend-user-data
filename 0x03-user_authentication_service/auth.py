@@ -31,7 +31,7 @@ class Auth:
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
-        """It registers a new user in database."""
+        """It registers new user in database."""
         try:
             self._db.find_user_by(email=email)
         except NoResultFound:
