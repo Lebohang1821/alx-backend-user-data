@@ -23,7 +23,7 @@ def _generate_uuid() -> str:
 
 
 class Auth:
-    """Class for handling authentication operations.
+    """Its a class for handling authentication operations.
     """
 
     def __init__(self):
