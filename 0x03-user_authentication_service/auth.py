@@ -53,7 +53,7 @@ class Auth:
         return False
 
     def create_session(self, email: str) -> str:
-        """Creates a new session for the user."""
+        """It creates new session for the user."""
         user = None
         try:
             user = self._db.find_user_by(email=email)
