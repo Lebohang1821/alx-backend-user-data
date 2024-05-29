@@ -78,7 +78,7 @@ def log_out(session_id: str) -> None:
 
 
 def reset_password_token(email: str) -> str:
-    """Test password reset token request."""
+    """It test password reset token request."""
     url = "{}/reset_password".format(BASE_URL)
     body = {'email': email}
     res = requests.post(url, data=body)
@@ -90,7 +90,7 @@ def reset_password_token(email: str) -> str:
 
 
 def update_password(email: str, reset_token: str, new_password: str) -> None:
-    """Test password update."""
+    """It test password update."""
     url = "{}/reset_password".format(BASE_URL)
     body = {
         'email': email,
