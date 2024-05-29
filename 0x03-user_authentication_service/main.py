@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
-"""End-to-end integration tests for `app.py`.
-"""
+"""End-to-end integration tests for `app.py`."""
 import requests
 
 
@@ -57,7 +56,7 @@ def profile_unlogged() -> None:
 
 
 def profile_logged(session_id: str) -> None:
-    """It test profile retrieval when logged in."""
+    """Test profile retrieval when logged in."""
     url = "{}/profile".format(BASE_URL)
     req_cookies = {
         'session_id': session_id,
@@ -113,4 +112,3 @@ if __name__ == "__main__":
     reset_token = reset_password_token(EMAIL)
     update_password(EMAIL, reset_token, NEW_PASSWD)
     log_in(EMAIL, NEW_PASSWD)
-
